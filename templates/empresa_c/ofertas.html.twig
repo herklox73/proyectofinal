@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Empresa - Ofertas Laborales {% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2>Gestión de Ofertas Laborales</h2>
+
+    <!-- Botón para abrir el modal de publicación -->
+    <button class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#modalPublicarOferta">
+        Publicar Oferta Laboral
+    </button>
+
+    <!-- Modal para publicar oferta -->
+    <div class="modal fade" id="modalPublicarOferta" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Publicar Nueva Oferta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    {{ form_start(form) }}
+                    <div class="mb-3">
+                        {{ form_label(form.cargo, 'Cargo') }}
+                        {{ form_widget(form.cargo, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(form.tipo_contrato, 'Tipo de Contrato') }}
+                        {{ form_widget(form.tipo_contrato, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(form.canton, 'Cantón') }}
+                        {{ form_widget(form.canton, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(form.parroquia, 'Parroquia') }}
+                        {{ form_widget(form.parroquia, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(form.remuneracion, 'Remuneración') }}
+                        {{ form_widget(form.remuneracion, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(form.jornada, 'Jornada de Trabajo') }}
+                        {{ form_widget(form.jornada, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(form.area_estudios, 'Área de Estudios') }}
+                        {{ form_widget(form.area_estudios, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(form.contacto, 'Contacto') }}
+                        {{ form_widget(form.contacto, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Publicar</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Ofertas Publicadas -->
+    <h3 class="mt-4">Ofertas Publicadas</h3>
+    <div class="list-group">
+        {% for oferta in ofertas %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ oferta.cargo }}</strong> - {{ oferta.tipo_contrato }}<br>
+                    <small>{{ oferta.canton }}, {{ oferta.parroquia }}</small>
+                </div>
+                <div>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarOferta({{ oferta.id }})">Eliminar</button>
+                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalPostulantes{{ oferta.id }}">
+                        Ver Postulantes
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal para ver postulantes -->
+            <div class="modal fade" id="modalPostulantes{{ oferta.id }}" tabindex="-1" aria-labelledby="postulantesLabel{{ oferta.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="postulantesLabel{{ oferta.id }}">Postulantes para {{ oferta.cargo }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% for postulacion in oferta.postulaciones %}
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ postulacion.postulante.nombres }} {{ postulacion.postulante.apellidos }}</h6>
+                                        <p class="card-text">Contacto: {{ postulacion.postulante.telefono }}</p>
+                                        <div class="d-flex justify-content-end">
+                                            <button class="btn btn-danger btn-sm me-2" onclick="gestionarPostulante({{ postulacion.id }}, 'rechazar')">Rechazar</button>
+                                            <a href="{{ asset('uploads/cv/' ~ postulacion.postulante.cv) }}" class="btn btn-primary btn-sm me-2" download>Descargar CV</a>
+                                            <button class="btn btn-success btn-sm" onclick="gestionarPostulante({{ postulacion.id }}, 'aceptar')">Aceptar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <p>No hay postulantes aún.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>No hay ofertas publicadas.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function eliminarOferta(id) {
+        if (confirm('¿Seguro que quieres eliminar esta oferta?')) {
+            fetch('/empresa/c/ofertas/' + id + '/eliminar', {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      location.reload();
+                  } else {
+                      alert('Error al eliminar la oferta.');
+                  }
+              }).catch(error => console.error('Error:', error));
+        }
+    }
+
+    function gestionarPostulante(id, accion) {
+        if (confirm(`¿Seguro que quieres ${accion} al postulante?`)) {
+            fetch(`/empresa/postulacion/${id}/accion/${accion}`, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      location.reload();
+                  } else {
+                      alert('Error al procesar la solicitud.');
+                  }
+              }).catch(error => console.error('Error:', error));
+        }
+    }
+</script>
+{% endblock %}

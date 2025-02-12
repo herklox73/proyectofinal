@@ -1,5 +1,24 @@
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+  resource:
+    path: ../src/Controller/
+    namespace: App\Controller
+  type: attribute
+app_login:
+  path: /login
+  controller: App\Controller\SecurityController::login
+
+redirect_after_login:
+  path: /redirect
+  controller: App\Controller\SecurityController::redirectAfterLogin
+
+postulante_registro:
+  path: /postulante/registro
+  controller: App\Controller\PostulanteController::registro
+
+empresa_dashboard:
+  path: /empresa_c/empresa
+  controller: App\Controller\EmpresaCController::dashboard
+
+homepage:
+  path: /
+  controller: App\Controller\HomeController::index

@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registro de Empresa{% endblock %}
+
+{% block body %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #008374;">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{{ path('homepage') }}">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" width="50" height="50" class="me-2">
+                <span class="fw-bold">NoroccidenteEmplea</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="{{ path('homepage') }}" class="btn btn-light text-success ms-3">Regresar al Inicio</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5" style="margin-top: 100px;">
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-primary">Registro de Empresa</h2>
+            <p>Por favor, complete los datos para registrar su empresa.</p>
+        </div>
+
+        <!-- Mensajes Flash -->
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success text-center mb-4">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger text-center mb-4">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <!-- Formulario -->
+        <div class="card shadow-sm border-light mx-auto" style="max-width: 800px;">
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}, 'enctype': 'multipart/form-data'}) }}
+
+                <div class="row g-3">
+                    <!-- Nombre de la Empresa -->
+                    <div class="col-md-6">
+                        {{ form_label(form.nombreEmpresa, 'Nombre de la Empresa', {'attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.nombreEmpresa, {'attr': {'class': 'form-control' ~ (form.nombreEmpresa.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                        {% if form.nombreEmpresa.vars.errors|length > 0 %}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.nombreEmpresa) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- RUC -->
+                    <div class="col-md-6">
+                        {{ form_label(form.ruc, 'RUC', {'attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.ruc, {'attr': {'class': 'form-control' ~ (form.ruc.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                        {% if form.ruc.vars.errors|length > 0 %}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.ruc) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Persona Encargada -->
+                    <div class="col-md-6">
+                        {{ form_label(form.personaEncargada, 'Persona Encargada', {'attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.personaEncargada, {'attr': {'class': 'form-control' ~ (form.personaEncargada.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                        {% if form.personaEncargada.vars.errors|length > 0 %}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.personaEncargada) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Contacto -->
+                    <div class="col-md-6">
+                        {{ form_label(form.contacto, 'Contacto', {'attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.contacto, {'attr': {'class': 'form-control' ~ (form.contacto.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                        {% if form.contacto.vars.errors|length > 0 %}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.contacto) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Ubicación -->
+                    <div class="col-md-6">
+                        {{ form_label(form.ubicacion, 'Ubicación', {'attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.ubicacion, {'attr': {'class': 'form-control' ~ (form.ubicacion.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                        {% if form.ubicacion.vars.errors|length > 0 %}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.ubicacion) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="col-md-6">
+                        {{ form_label(form.direccion, 'Dirección', {'attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.direccion, {'attr': {'class': 'form-control' ~ (form.direccion.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                        {% if form.direccion.vars.errors|length > 0 %}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.direccion) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Correo Electrónico -->
+                    <div class="col-md-6">
+                        {{ form_label(form.email, 'Correo Electrónico', {'attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control' ~ (form.email.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                        {% if form.email.vars.errors|length > 0 %}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.email) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                     <!-- Contraseña -->
+                    <div class="col-md-6">
+                        {{ form_label(form.password, 'Contraseña', {'attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.password, {'attr': {'class': 'form-control' ~ (form.password.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                        {% if form.password.vars.errors|length > 0 %}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.password) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Foto de Perfil -->
+                    <div class="col-md-6">
+                        {{ form_label(form.fotoPerfil, 'Foto de Perfil (opcional)', {'attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.fotoPerfil, {'attr': {'class': 'form-control'}}) }}
+                        <div class="form-text">Sube una imagen en formato JPEG, PNG o GIF.</div>
+                        {% if form.fotoPerfil.vars.errors|length > 0 %}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.fotoPerfil) }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Botón de Enviar -->
+                    <div class="col-12 text-center mt-3">
+                        <button type="submit" class="btn btn-success btn-lg px-5">Registrarse como Empresa</button>
+                    </div>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

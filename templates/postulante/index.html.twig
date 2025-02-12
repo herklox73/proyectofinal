@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Postulantes{% endblock %}
+
+{% block body %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="{{ asset('images/logo.png') }}" alt="Logo" width="50" height="50" class="me-2">
+      <span class="fw-bold">NoroccidenteEmplea</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+     <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        {% if app.user %}
+          <li class="nav-item d-flex align-items-center">
+            <span class="me-3 text-muted">Conectado como {{ app.user.userIdentifier }}</span>
+            <a href="{{ path('app_logout') }}" class="btn btn-danger btn-sm">Cerrar sesión</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+       
+  </div>
+</nav>
+
+<div class="container py-5">
+  <h2 class="text-center mb-4 fw-bold">Postulantes</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+<footer class="text-white text-center py-4" style="background-color: #008374;">
+    <div class="container">
+        <h3 class="fw-bold">NoroccidenteEmplea</h3>
+        <p>Conectando oportunidades, construyendo futuro</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="#" class="text-white fs-4"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="text-white fs-4"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="text-white fs-4"><i class="bi bi-linkedin"></i></a>
+        </div>
+        <hr class="my-3 border-light">
+        <p class="mb-0">&copy; 2024 <strong>NoroccidenteEmplea</strong>. Todos los derechos reservados</p>
+    </div>
+</footer>
+
+
+
+
+<style>
+  .navbar-custom {
+    background-color: rgba(0, 131, 116, 0.85);
+  }
+  .card {
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+  }
+  .card:hover {
+    transform: scale(1.05);
+  }
+  .modal-header, .modal-footer {
+    background-color: #f8f9fa;
+  }
+  .modal-title {
+    font-weight: bold;
+  }
+  html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  main {
+    flex: 1;
+  }
+  footer {
+    margin-top: auto;
+  }
+      h2.text-center {
+  margin-top: 50px;
+}
+</style>
+
+{% endblock %}

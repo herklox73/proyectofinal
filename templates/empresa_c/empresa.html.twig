@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="container">
+    <h2>Gestión de Ofertas Laborales</h2>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPublicarOferta">
+        Publicar Nueva Oferta
+    </button>
+
+    <div class="modal fade" id="modalPublicarOferta" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Publicar Nueva Oferta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPublicarOferta">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Cargo Solicitado</label>
+                                <input type="text" id="cargo" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Tipo de Contrato</label>
+                                <input type="text" id="tipoContrato" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Cantón</label>
+                                <input type="text" id="canton" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Parroquia</label>
+                                <input type="text" id="parroquia" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Remuneración</label>
+                                <input type="number" step="0.01" id="remuneracion" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Jornada</label>
+                                <input type="text" id="jornada" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Área de Estudios</label>
+                                <input type="text" id="areaEstudios" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Contacto</label>
+                                <input type="text" id="contacto" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">Publicar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('formPublicarOferta').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let formData = {
+                cargo: document.getElementById('cargo').value,
+                tipoContrato: document.getElementById('tipoContrato').value,
+                canton: document.getElementById('canton').value,
+                parroquia: document.getElementById('parroquia').value,
+                remuneracion: document.getElementById('remuneracion').value,
+                jornada: document.getElementById('jornada').value,
+                areaEstudios: document.getElementById('areaEstudios').value,
+                contacto: document.getElementById('contacto').value
+            };
+
+            fetch('{{ path("publicar_oferta") }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    let listaOfertas = document.getElementById('listaOfertas');
+                    let nuevaOferta = document.createElement('li');
+                    nuevaOferta.innerHTML = `
+                        <strong>${data.cargo}</strong> - ${data.tipoContrato}, ${data.canton}, ${data.parroquia} <br>
+                        <strong>Remuneración:</strong> ${data.remuneracion} - <strong>Jornada:</strong> ${data.jornada} <br>
+                        <strong>Área de Estudios:</strong> ${data.areaEstudios} - <strong>Contacto:</strong> ${data.contacto}
+                    `;
+                    listaOfertas.appendChild(nuevaOferta);
+                    let modal = bootstrap.Modal.getInstance(document.getElementById('modalPublicarOferta'));
+                    modal.hide();
+                } else {
+                    alert('Error al publicar la oferta.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <ul id="listaOfertas">
+        {% for oferta in ofertas %}
+            <li>
+                <strong>{{ oferta.cargo }}</strong> - {{ oferta.tipoContrato }}, {{ oferta.canton }}, {{ oferta.parroquia }} <br>
+                <strong>Remuneración:</strong> {{ oferta.remuneracion }} - <strong>Jornada:</strong> {{ oferta.jornada }} <br>
+                <strong>Área de Estudios:</strong> {{ oferta.areaEstudios }} - <strong>Contacto:</strong> {{ oferta.contacto }}
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

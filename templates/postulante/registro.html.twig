@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registro de Postulante{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Registro de Postulante</h2>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success text-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <h4 class="card-title text-center mb-4">Complete sus datos</h4>
+
+            {{ form_start(form) }}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.nombres, null, {'label_attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(form.nombres, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.apellidos, null, {'label_attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(form.apellidos, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.genero, null, {'label_attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(form.genero, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.edad, null, {'label_attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(form.edad, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.direccion, null, {'label_attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(form.direccion, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.cedula, null, {'label_attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(form.cedula, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.telefono, null, {'label_attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(form.telefono, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.email, null, {'label_attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.password.first, null, {'label_attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(form.password.first, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.password.second, null, {'label_attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(form.password.second, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary px-4">Registrar</button>
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,234 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registro{% endblock %}
+
+{% block body %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #008374;">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{{ path('homepage') }}">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" width="50" height="50" class="me-2">
+                <span class="fw-bold">NoroccidenteEmplea</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="{{ path('homepage') }}" class="btn btn-light text-success ms-3">Regresar al Inicio</a>
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5" style="margin-top: 100px;">
+      <div class="text-center mb-4">
+    <h2 class="fw-bold text-primary" id="titulo-formulario">Registro de Empresa</h2>
+    <p id="descripcion-formulario">Complete los datos para registrar su empresa.</p>
+    <!-- Botón deslizante -->
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="toggleForm">
+        <label class="form-check-label" for="toggleForm" id="label-toggle">Soy una Empresa</label>
+    </div>
+</div>
+
+        <div class="row">
+      
+         <!-- Registro de Empresa -->
+<div class="col-lg-6 mx-auto" id="empresa-form">
+    <div class="card shadow-sm border-light">
+        <div class="card-body">
+            {{ form_start(empresaForm, {'attr': {'novalidate': 'novalidate'}, 'enctype': 'multipart/form-data'}) }}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(empresaForm.nombreEmpresa, 'Nombre de la Empresa', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(empresaForm.nombreEmpresa, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(empresaForm.nombreEmpresa) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(empresaForm.ruc, 'RUC', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(empresaForm.ruc, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(empresaForm.ruc) }}
+                </div>
+            </div>
+ <div class="row">
+            <div class="col-md-6 ">
+                {{ form_label(empresaForm.personaEncargada, 'Persona Encargada', {'attr': {'class': 'fw-bold'}}) }}
+                {{ form_widget(empresaForm.personaEncargada, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(empresaForm.personaEncargada) }}
+            </div>
+
+            <div class=col-md-6 mb-3">
+                {{ form_label(empresaForm.contacto, 'Contacto', {'attr': {'class': 'fw-bold'}}) }}
+                {{ form_widget(empresaForm.contacto, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(empresaForm.contacto) }}
+            </div>
+ </div>
+  <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form_label(empresaForm.ubicacion, 'Ubicación', {'attr': {'class': 'fw-bold'}}) }}
+                {{ form_widget(empresaForm.ubicacion, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(empresaForm.ubicacion) }}
+            </div>
+
+                <div class="col-md-6 mb-3">
+                    {{ form_label(empresaForm.direccion, 'Dirección', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(empresaForm.direccion, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(empresaForm.direccion) }}
+                
+                  </div>
+
+       </div>        
+        <div class="row">      
+                <div class="col-md-6 mb-3">
+                    {{ form_label(empresaForm.email, 'Correo Electrónico', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(empresaForm.email, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(empresaForm.email) }}
+                </div>
+           
+ 
+            <div class=col-md-6 mb-3">
+                {{ form_label(empresaForm.password, 'Contraseña', {'attr': {'class': 'fw-bold'}}) }}
+                {{ form_widget(empresaForm.password, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(empresaForm.password) }}
+            </div>
+ </div>    
+            <div class=" mb-3">
+                {{ form_label(empresaForm.fotoPerfil, 'Foto de Perfil (opcional)', {'attr': {'class': 'fw-bold'}}) }}
+                {{ form_widget(empresaForm.fotoPerfil, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(empresaForm.fotoPerfil) }}
+            </div>
+
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-success btn-lg px-5">Registrar Empresa</button>
+            </div>
+
+            {{ form_end(empresaForm) }}
+        </div>
+    </div>
+</div>
+
+
+       
+            <!-- Registro de Postulante -->
+<div class="col-lg-6 mx-auto d-none" id="postulante-form">
+    <div class="card shadow-sm border-light">
+        <div class="card-body">
+            {{ form_start(postulanteForm) }}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(postulanteForm.nombres, 'Nombres', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(postulanteForm.nombres, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(postulanteForm.nombres) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(postulanteForm.apellidos, 'Apellidos', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(postulanteForm.apellidos, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(postulanteForm.apellidos) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(postulanteForm.genero, 'Género', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(postulanteForm.genero, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(postulanteForm.genero) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(postulanteForm.edad, 'Edad', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(postulanteForm.edad, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(postulanteForm.edad) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(postulanteForm.cedula, 'Cédula', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(postulanteForm.cedula, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(postulanteForm.cedula) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(postulanteForm.telefono, 'Teléfono', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(postulanteForm.telefono, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(postulanteForm.telefono) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(postulanteForm.email, 'Correo Electrónico', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(postulanteForm.email, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(postulanteForm.email) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(postulanteForm.direccion, 'Dirección', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(postulanteForm.direccion, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(postulanteForm.direccion) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(postulanteForm.password.first, 'Contraseña', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(postulanteForm.password.first, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(postulanteForm.password.first) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(postulanteForm.password.second, 'Repetir Contraseña', {'attr': {'class': 'fw-bold'}}) }}
+                    {{ form_widget(postulanteForm.password.second, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(postulanteForm.password.second) }}
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary btn-lg px-5">Registrar Postulante</button>
+            </div>
+
+            {{ form_end(postulanteForm) }}
+        </div>
+    </div>
+</div>
+
+<script>
+   document.addEventListener("DOMContentLoaded", function() {
+    const toggleSwitch = document.getElementById("toggleForm");
+    const tituloFormulario = document.getElementById("titulo-formulario");
+    const descripcionFormulario = document.getElementById("descripcion-formulario");
+    const labelToggle = document.getElementById("label-toggle");
+    const postulanteForm = document.getElementById("postulante-form");
+    const empresaForm = document.getElementById("empresa-form");
+
+    // ⚡ Función para actualizar el formulario según el estado del checkbox
+    function actualizarFormulario() {
+        if (toggleSwitch.checked) {
+            tituloFormulario.textContent = "Registro de Empresa";
+            descripcionFormulario.textContent = "Complete los datos para registrar su empresa.";
+            labelToggle.textContent = "Soy una Empresa";
+            empresaForm.classList.remove("d-none");
+            postulanteForm.classList.add("d-none");
+        } else {
+            tituloFormulario.textContent = "Registro de Postulante";
+            descripcionFormulario.textContent = "Complete los datos para registrarse como postulante.";
+            labelToggle.textContent = "Soy un postulante";
+            postulanteForm.classList.remove("d-none");
+            empresaForm.classList.add("d-none");
+        }
+    }
+
+    // ✅ Llamamos a la función al cargar la página para sincronizar el estado inicial
+    actualizarFormulario();
+
+    // 🎯 Evento que detecta cambios en el switch
+    toggleSwitch.addEventListener("change", actualizarFormulario);
+});
+
+
+</script>
+
+
+{% endblock %}
