@@ -13,7 +13,7 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-     <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         {% if app.user %}
           <li class="nav-item d-flex align-items-center">
@@ -23,49 +23,29 @@
         {% endif %}
       </ul>
     </div>
-       
   </div>
 </nav>
 
-<div class="container py-5">
+<!-- Contenido Principal -->
+<div class="container py-5 mt-5"> <!-- Se agrega mt-5 para crear espacio por debajo del navbar -->
   <h2 class="text-center mb-4 fw-bold">Postulantes</h2>
+  <!-- Aquí iría el contenido de postulantes... -->
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
+<!-- Footer -->
 <footer class="text-white text-center py-4" style="background-color: #008374;">
-    <div class="container">
-        <h3 class="fw-bold">NoroccidenteEmplea</h3>
-        <p>Conectando oportunidades, construyendo futuro</p>
-        <div class="d-flex justify-content-center gap-3">
-            <a href="#" class="text-white fs-4"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="text-white fs-4"><i class="bi bi-twitter-x"></i></a>
-            <a href="#" class="text-white fs-4"><i class="bi bi-linkedin"></i></a>
-        </div>
-        <hr class="my-3 border-light">
-        <p class="mb-0">&copy; 2024 <strong>NoroccidenteEmplea</strong>. Todos los derechos reservados</p>
+  <div class="container">
+    <h3 class="fw-bold">NoroccidenteEmplea</h3>
+    <p>Conectando oportunidades, construyendo futuro</p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="#" class="text-white fs-4"><i class="bi bi-facebook"></i></a>
+      <a href="#" class="text-white fs-4"><i class="bi bi-twitter-x"></i></a>
+      <a href="#" class="text-white fs-4"><i class="bi bi-linkedin"></i></a>
     </div>
+    <hr class="my-3 border-light">
+    <p class="mb-0">&copy; Copyright <strong>NoroccidenteEmplea</strong>. Todos los derechos reservados</p>
+  </div>
 </footer>
-
-
-
 
 <style>
   .navbar-custom {
@@ -96,9 +76,9 @@
   footer {
     margin-top: auto;
   }
-      h2.text-center {
-  margin-top: 50px;
-}
+  h2.text-center {
+    margin-top: 50px;
+  }
 </style>
 
 {% endblock %}
