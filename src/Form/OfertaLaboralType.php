@@ -13,28 +13,36 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OfertaLaboralType extends AbstractType
 {
+    private const TIPOS_CONTRATO = [
+        'Indefinido' => 'Indefinido',
+        'Temporal' => 'Temporal',
+        'Freelance' => 'Freelance',
+        'Prácticas' => 'Prácticas',
+        'Contrato por obra' => 'Contrato por obra',
+    ];
+
+    private const TIPOS_JORNADA = [
+        'Tiempo completo' => 'Tiempo completo',
+        'Medio tiempo' => 'Medio tiempo',
+        'Por horas' => 'Por horas',
+        'Turnos rotativos' => 'Turnos rotativos',
+        'Teletrabajo' => 'Teletrabajo',
+    ];
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('cargo', TextType::class, ['label' => 'Cargo'])
-            ->add('tipo_contacto', ChoiceType::class, [
+            ->add('tipo_contrato', ChoiceType::class, [
                 'label' => 'Tipo de contrato',
-                'choices' => [
-                    'Indefinido' => 'Indefinido',
-                    'Temporal' => 'Temporal',
-                    'Freelance' => 'Freelance',
-                ]
+                'choices' => self::TIPOS_CONTRATO,
             ])
             ->add('canton', TextType::class, ['label' => 'Cantón'])
             ->add('parroquia', TextType::class, ['label' => 'Parroquia'])
             ->add('remuneracion', NumberType::class, ['label' => 'Remuneración'])
             ->add('jornada', ChoiceType::class, [
                 'label' => 'Jornada de trabajo',
-                'choices' => [
-                    'Tiempo completo' => 'Tiempo completo',
-                    'Medio tiempo' => 'Medio tiempo',
-                    'Por horas' => 'Por horas',
-                ]
+                'choices' => self::TIPOS_JORNADA,
             ])
             ->add('area_estudios', TextType::class, ['label' => 'Área de estudios'])
             ->add('contacto', TextType::class, ['label' => 'Contacto'])

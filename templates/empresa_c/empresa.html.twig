@@ -74,9 +74,17 @@
                             <input type="text" id="cargo" class="form-control" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Tipo de Contrato</label>
-                            <input type="text" id="tipo_contrato" class="form-control" required>
-                        </div>
+    <label class="form-label">Tipo de Contrato</label>
+    <select id="tipo_contrato" class="form-select" required>
+        <option value="" selected disabled>Seleccione un tipo de contrato</option>
+        <option value="Indefinido">Indefinido</option>
+        <option value="Temporal">Temporal</option>
+        <option value="Freelance">Freelance</option>
+        <option value="Prácticas">Prácticas</option>
+        <option value="Contrato por obra">Contrato por obra</option>
+    </select>
+</div>
+
                     </div>
 
                     <div class="row">
@@ -96,9 +104,16 @@
                             <input type="number" step="0.01" id="remuneracion" class="form-control" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Jornada</label>
-                            <input type="text" id="jornada" class="form-control" required>
-                        </div>
+    <label class="form-label">Jornada</label>
+    <select id="jornada" class="form-select" required>
+        <option value="" selected disabled>Seleccione una jornada</option>
+        <option value="Tiempo completo">Tiempo completo</option>
+        <option value="Medio tiempo">Medio tiempo</option>
+        <option value="Por horas">Por horas</option>
+        <option value="Turnos rotativos">Turnos rotativos</option>
+        <option value="Teletrabajo">Teletrabajo</option>
+    </select>
+</div>
                     </div>
 
                     <div class="row">
