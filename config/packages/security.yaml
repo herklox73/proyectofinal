@@ -35,9 +35,11 @@ security:
         path: /
 
   access_control:
-    - { path: ^/empresa/c, roles: PUBLIC_ACCESS }
+    - { path: ^/publicar-oferta, roles: ROLE_EMPRESA }
+    - { path: ^/empresa_c/ofertas, roles: ROLE_EMPRESA }
+    - { path: ^/empresa/c, roles: ROLE_EMPRESA }
     - { path: ^/empresa, roles: ROLE_EMPRESA }
-    - { path: ^/postulante, roles: PUBLIC_ACCESS }
+    - { path: ^/postulante, roles: ROLE_POSTULANTE }
     - { path: ^/login, roles: PUBLIC_ACCESS }
     - { path: ^/logout, roles: PUBLIC_ACCESS }
     - { path: ^/, roles: PUBLIC_ACCESS }

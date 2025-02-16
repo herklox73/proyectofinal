@@ -3,6 +3,7 @@ controllers:
     path: ../src/Controller/
     namespace: App\Controller
   type: attribute
+
 app_login:
   path: /login
   controller: App\Controller\SecurityController::login
@@ -22,3 +23,18 @@ empresa_dashboard:
 homepage:
   path: /
   controller: App\Controller\HomeController::index
+
+publicar_oferta:
+  path: /publicar-oferta
+  controller: App\Controller\OfertaLaboralController::publicarOferta
+  methods: POST
+
+eliminar_oferta:
+  path: /eliminar-oferta/{id}
+  controller: App\Controller\OfertaLaboralController::eliminarOferta
+  methods: DELETE
+
+postulante:
+  path: /postulante/{id}
+  controller: App\Controller\PostulanteController::index
+  methods: [GET]

@@ -17,7 +17,7 @@
       <ul class="navbar-nav ms-auto">
         {% if app.user %}
           <li class="nav-item d-flex align-items-center">
-            <span class="me-3 text-muted">Conectado como {{ app.user.userIdentifier }}</span>
+            <span class="me-3 text-custom">Conectado como {{ app.user.userIdentifier }}</span>
             <a href="{{ path('app_logout') }}" class="btn btn-danger btn-sm">Cerrar sesión</a>
           </li>
         {% endif %}
@@ -27,9 +27,142 @@
 </nav>
 
 <!-- Contenido Principal -->
-<div class="container py-5 mt-5"> <!-- Se agrega mt-5 para crear espacio por debajo del navbar -->
-  <h2 class="text-center mb-4 fw-bold">Postulantes</h2>
-  <!-- Aquí iría el contenido de postulantes... -->
+<div class="container py-5 mt-5">
+  <h2 class="text-center mb-4 fw-bold">Ofertas Laborales</h2>
+  <div class="row">
+    <!-- Sección de Ofertas -->
+    <div class="col-md-8 order-1 order-md-0">
+      <div class="row gy-4"> {# Agregamos `gy-4` para más separación entre filas #}
+        {% for oferta in ofertas %}
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ oferta.cargo }}</h5>
+                <p class="card-text">Tipo de Contrato: {{ oferta.tipoContrato }}</p>
+                <p class="card-text">Ubicación: {{ oferta.canton }}, {{ oferta.parroquia }}</p>
+                <div class="d-flex justify-content-between">
+                  <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalVerMas{{ oferta.id }}">Ver Más</button>
+                  
+                  {% set postulacion = postulaciones|filter(p => p.oferta.id == oferta.id)|first %}
+                  {% if postulacion %}
+                    {% if postulacion.estado == 'Aceptado' %}
+                      <button class="btn btn-success btn-sm" disabled>Aceptado</button>
+                    {% elseif postulacion.estado == 'Rechazado' %}
+                      <button class="btn btn-danger btn-sm" disabled>Rechazado</button>
+                    {% else %}
+                      <button class="btn btn-warning btn-sm" disabled>Pendiente</button>
+                    {% endif %}
+                  {% else %}
+                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAplicar{{ oferta.id }}">Aplicar</button>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+      <!-- Modal Ver Más -->
+      <div class="modal fade" id="modalVerMas{{ oferta.id }}" tabindex="-1" aria-labelledby="modalVerMasLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalVerMasLabel">{{ oferta.cargo }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p><strong>Cargo:</strong> {{ oferta.cargo }}</p>
+              <p><strong>Tipo de Contrato:</strong> {{ oferta.tipoContrato }}</p>
+              <p><strong>Ubicación:</strong> {{ oferta.canton }}, {{ oferta.parroquia }}</p>
+              <p><strong>Remuneración:</strong> {{ oferta.remuneracion }}</p>
+              <p><strong>Jornada:</strong> {{ oferta.jornada }}</p>
+              <p><strong>Área de Estudios:</strong> {{ oferta.areaEstudios }}</p>
+              <p><strong>Contacto:</strong> {{ oferta.contacto }}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Aplicar -->
+      <div class="modal fade" id="modalAplicar{{ oferta.id }}" tabindex="-1" aria-labelledby="modalAplicarLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalAplicarLabel">Aplicar a {{ oferta.cargo }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ path('postulacion_nueva', {'ofertaId': oferta.id}) }}" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                  <label for="nombres" class="form-label">Nombres</label>
+                  <input type="text" class="form-control" id="nombres" name="nombres" required>
+                </div>
+                <div class="mb-3">
+                  <label for="descripcion" class="form-label">Descripción</label>
+                  <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="curriculum" class="form-label">Currículum</label>
+                  <input type="file" class="form-control" id="curriculum" name="curriculum" accept=".pdf, .doc, .docx" required>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+   <!-- Sección de Perfil - Derecha -->
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-body text-center">
+          <!-- Foto de Perfil con Edición -->
+          <form method="POST" action="{{ path('postulante_actualizar_foto') }}" enctype="multipart/form-data" id="formFotoPerfil">
+            <div class="position-relative mb-3">
+              <div class="profile-picture-container">
+                <img src="{{ postulante.fotoPerfil ? asset('uploads/profile/' ~ postulante.fotoPerfil) : asset('images/default-profile.png') }}" 
+                     class="img-fluid rounded-circle profile-picture" 
+                     alt="Foto de perfil" width="150" height="150">
+                <div class="edit-icon">
+                  <label for="fotoPerfilInput">
+                    <i class="fas fa-pencil-alt"></i>
+                  </label>
+                </div>
+              </div>
+              <input type="file" id="fotoPerfilInput" name="fotoPerfil" class="d-none" accept="image/*" onchange="this.form.submit()">
+            </div>
+          </form>
+
+          <!-- Información del Postulante -->
+          <div class="postulante-info">
+            <h4 class="mb-3">{{ postulante.nombres }} {{ postulante.apellidos }}</h4>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <strong>Género:</strong> {{ postulante.genero }}
+              </li>
+              <li class="mb-2">
+                <strong>Teléfono:</strong> {{ postulante.telefono }}
+              </li>
+              <li class="mb-2">
+                <strong>Cédula:</strong> {{ postulante.cedula }}
+              </li>
+              <li class="mb-2">
+                <strong>Email:</strong> {{ app.user.userIdentifier }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Footer -->
@@ -48,6 +181,54 @@
 </footer>
 
 <style>
+   .profile-picture-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+  }
+
+  .profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 3px solid #008374;
+  }
+
+  .edit-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: #008374;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .edit-icon:hover {
+    background: #00695c;
+  }
+
+  .postulante-info {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .postulante-info li {
+    border-bottom: 1px solid #dee2e6;
+    padding: 8px 0;
+  }
+
+  .postulante-info li:last-child {
+    border-bottom: none;
+  }
   .navbar-custom {
     background-color: rgba(0, 131, 116, 0.85);
   }
@@ -78,6 +259,10 @@
   }
   h2.text-center {
     margin-top: 50px;
+  }
+  
+  .card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 </style>
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OfertaLaboralRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,7 +20,7 @@ class OfertaLaboral
     private ?string $cargo = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $tipo_contacto = null;
+    private ?string $tipo_contrato = null;
 
     #[ORM\Column(length: 100)]
     private ?string $canton = null;
@@ -41,9 +43,17 @@ class OfertaLaboral
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_publicacion = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ofertaLaborals')]
+    #[ORM\ManyToOne(targetEntity: Empresa::class, inversedBy: 'ofertasLaborales')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Empresa $empresa = null;
+
+    #[ORM\OneToMany(mappedBy: 'oferta', targetEntity: Postulacion::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $postulaciones;
+
+    public function __construct()
+    {
+        $this->postulaciones = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -58,19 +68,17 @@ class OfertaLaboral
     public function setCargo(string $cargo): static
     {
         $this->cargo = $cargo;
-
         return $this;
     }
 
-    public function getTipoContacto(): ?string
+    public function getTipoContrato(): ?string
     {
-        return $this->tipo_contacto;
+        return $this->tipo_contrato;
     }
-
-    public function setTipoContacto(string $tipo_contacto): static
+    
+    public function setTipoContrato(string $tipo_contrato): static
     {
-        $this->tipo_contacto = $tipo_contacto;
-
+        $this->tipo_contrato = $tipo_contrato;
         return $this;
     }
 
@@ -82,7 +90,6 @@ class OfertaLaboral
     public function setCanton(string $canton): static
     {
         $this->canton = $canton;
-
         return $this;
     }
 
@@ -94,7 +101,6 @@ class OfertaLaboral
     public function setParroquia(string $parroquia): static
     {
         $this->parroquia = $parroquia;
-
         return $this;
     }
 
@@ -106,7 +112,6 @@ class OfertaLaboral
     public function setRemuneracion(string $remuneracion): static
     {
         $this->remuneracion = $remuneracion;
-
         return $this;
     }
 
@@ -118,7 +123,6 @@ class OfertaLaboral
     public function setJornada(string $jornada): static
     {
         $this->jornada = $jornada;
-
         return $this;
     }
 
@@ -130,7 +134,6 @@ class OfertaLaboral
     public function setAreaEstudios(string $area_estudios): static
     {
         $this->area_estudios = $area_estudios;
-
         return $this;
     }
 
@@ -142,7 +145,6 @@ class OfertaLaboral
     public function setContacto(string $contacto): static
     {
         $this->contacto = $contacto;
-
         return $this;
     }
 
@@ -154,7 +156,6 @@ class OfertaLaboral
     public function setFechaPublicacion(\DateTimeInterface $fecha_publicacion): static
     {
         $this->fecha_publicacion = $fecha_publicacion;
-
         return $this;
     }
 
@@ -166,7 +167,33 @@ class OfertaLaboral
     public function setEmpresa(?Empresa $empresa): static
     {
         $this->empresa = $empresa;
+        return $this;
+    }
 
+    /**
+     * @return Collection<int, Postulacion>
+     */
+    public function getPostulaciones(): Collection
+    {
+        return $this->postulaciones;
+    }
+
+    public function addPostulacion(Postulacion $postulacion): static
+    {
+        if (!$this->postulaciones->contains($postulacion)) {
+            $this->postulaciones->add($postulacion);
+            $postulacion->setOferta($this);
+        }
+        return $this;
+    }
+
+    public function removePostulacion(Postulacion $postulacion): static
+    {
+        if ($this->postulaciones->removeElement($postulacion)) {
+            if ($postulacion->getOferta() === $this) {
+                $postulacion->setOferta(null);
+            }
+        }
         return $this;
     }
 }

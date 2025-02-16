@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Entity;
-
+use App\Entity\Postulante;
+use App\Entity\Empresa;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,6 +30,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: "string", length: 50, nullable: true)]
     private ?string $tipo = null;
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Empresa::class, cascade: ['persist', 'remove'])]
+    private ?Empresa $empresa = null;
+
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Postulante::class, cascade: ['persist', 'remove'])]
+    private ?Postulante $postulante = null;
+    
 
     public function getId(): ?int
     {
@@ -50,6 +57,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
+        if ($this->tipo === 'empresa') {
+            $roles[] = 'ROLE_EMPRESA';
+        }
         return array_unique($roles);
     }
 
@@ -89,4 +99,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->email ?? '';
     }
+
+    public function getEmpresa(): ?Empresa
+    {
+        return $this->empresa;
+    }
+
+    public function setEmpresa(?Empresa $empresa): self
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    public function getPostulante(): ?Postulante
+    {
+        return $this->postulante;
+    }
+    
+    public function setPostulante(?Postulante $postulante): self
+    {
+        $this->postulante = $postulante;
+        return $this;
+    }
+
 }

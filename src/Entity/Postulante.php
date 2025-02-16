@@ -1,9 +1,13 @@
 <?php
 
 namespace App\Entity;
-
+use App\Entity\User;
+use App\Entity\Postulacion;
 use App\Repository\PostulanteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PostulanteRepository::class)]
 class Postulante
@@ -35,10 +39,30 @@ class Postulante
     #[ORM\Column(length: 20)]
     private ?string $telefono = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $fotoPerfil = null;
+
+    #[ORM\OneToOne(mappedBy: "postulante", targetEntity: Curriculum::class, cascade: ["persist", "remove"])]
+    private ?Curriculum $curriculum = null;
+    
+    public function getCurriculum(): ?Curriculum
+    {
+        return $this->curriculum;
+    }
+    
+    public function setCurriculum(Curriculum $curriculum): static
+    {
+        $this->curriculum = $curriculum;
+        return $this;
+    }
+    
+    #[ORM\OneToMany(mappedBy: 'postulante', targetEntity: Postulacion::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $postulaciones;
+
+    
+    #[ORM\OneToOne(inversedBy: "postulante", targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -125,6 +149,18 @@ class Postulante
     {
         $this->telefono = $telefono;
 
+        return $this;
+    }
+
+    public function getFotoPerfil(): ?string
+    {
+        return $this->fotoPerfil;
+    }
+    
+    public function setFotoPerfil(?string $fotoPerfil): static
+    {
+        $this->fotoPerfil = $fotoPerfil;
+    
         return $this;
     }
 

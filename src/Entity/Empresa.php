@@ -45,9 +45,9 @@ class Empresa
     #[ORM\OneToOne(inversedBy: 'empresa', targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'usuario_id', referencedColumnName: 'id', nullable: false)]
     private ?User $user = null;
-
-    #[ORM\OneToMany(targetEntity: OfertaLaboral::class, mappedBy: 'empresa', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'empresa', targetEntity: OfertaLaboral::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $ofertasLaborales;
+    
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $fotoPerfil = null;
@@ -135,7 +135,7 @@ class Empresa
         return $this->user;
     }
 
-    public function setUser(User $user): static
+    public function setUser(User $user): self
     {
         $this->user = $user;
         return $this;

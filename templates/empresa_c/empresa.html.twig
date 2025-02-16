@@ -15,7 +15,7 @@
       <ul class="navbar-nav ms-auto">
         {% if app.user %}
           <li class="nav-item d-flex align-items-center">
-            <span class="me-3 text-muted">Conectado como {{ app.user.userIdentifier }}</span>
+            <span class="me-3 text-custom">Conectado como {{ app.user.userIdentifier }}</span>
             <a href="{{ path('app_logout') }}" class="btn btn-danger btn-sm">Cerrar sesión</a>
           </li>
         {% endif %}
@@ -24,143 +24,398 @@
   </div>
 </nav>
 
-<!-- Main content container with margin to avoid overlap with navbar -->
-<div class="container pt-5" style="margin-top: 80px;"> <!-- Added pt-5 and custom margin -->
-    <h2>Gestión de Ofertas Laborales</h2>
-
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPublicarOferta">
+<div class="container mt-5">
+  <div class="row">
+    <!-- Sección de Ofertas - Izquierda -->
+    <div class="col-md-8">
+      <h2>Gestión de Ofertas Laborales</h2>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPublicarOferta">
         Publicar Nueva Oferta
-    </button>
+      </button>
+      <div class="row mt-3">
+        {% for oferta in ofertas %}
+          <div class="col-md-6">
+            <div class="card p-3 mb-3">
+              <h5 class="fw-bold">{{ oferta.cargo }}</h5>
+              <p><strong>Tipo de Contrato:</strong> {{ oferta.tipoContrato }}</p>
+              <p><strong>Ubicación:</strong> {{ oferta.canton }}, {{ oferta.parroquia }}</p>
+              <p><strong>Remuneración:</strong> ${{ oferta.remuneracion }}</p>
+              <p><strong>Jornada:</strong> {{ oferta.jornada }}</p>
+              <p><strong>Área de Estudios:</strong> {{ oferta.areaEstudios }}</p>
+              <p><strong>Contacto:</strong> {{ oferta.contacto }}</p>
 
-    <!-- Modal for posting a new offer -->
-    <div class="modal fade" id="modalPublicarOferta" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Publicar Nueva Oferta</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formPublicarOferta">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Cargo Solicitado</label>
-                                <input type="text" id="cargo" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Tipo de Contrato</label>
-                                <input type="text" id="tipoContrato" class="form-control" required>
-                            </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-danger btn-sm" onclick="confirmarEliminar({{ oferta.id }})">Eliminar</button>
+                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalPostulantes" onclick="cargarPostulantes({{ oferta.id }})">
+                  Ver Postulantes
+                </button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+
+
+<!-- Modal for posting a new offer -->
+<div class="modal fade" id="modalPublicarOferta" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Publicar Nueva Oferta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formPublicarOferta">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Cargo Solicitado</label>
+                            <input type="text" id="cargo" class="form-control" required>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Cantón</label>
-                                <input type="text" id="canton" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Parroquia</label>
-                                <input type="text" id="parroquia" class="form-control" required>
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tipo de Contrato</label>
+                            <input type="text" id="tipo_contrato" class="form-control" required>
                         </div>
+                    </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Remuneración</label>
-                                <input type="number" step="0.01" id="remuneracion" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Jornada</label>
-                                <input type="text" id="jornada" class="form-control" required>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Cantón</label>
+                            <input type="text" id="canton" class="form-control" required>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Área de Estudios</label>
-                                <input type="text" id="areaEstudios" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Contacto</label>
-                                <input type="text" id="contacto" class="form-control" required>
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Parroquia</label>
+                            <input type="text" id="parroquia" class="form-control" required>
                         </div>
+                    </div>
 
-                        <button type="submit" class="btn btn-success w-100">Publicar</button>
-                    </form>
-                </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Remuneración</label>
+                            <input type="number" step="0.01" id="remuneracion" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Jornada</label>
+                            <input type="text" id="jornada" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Área de Estudios</label>
+                            <input type="text" id="areaEstudios" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Contacto</label>
+                            <input type="text" id="contacto" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Publicar</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        document.getElementById('formPublicarOferta').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            let formData = {
-                cargo: document.getElementById('cargo').value,
-                tipoContrato: document.getElementById('tipoContrato').value,
-                canton: document.getElementById('canton').value,
-                parroquia: document.getElementById('parroquia').value,
-                remuneracion: document.getElementById('remuneracion').value,
-                jornada: document.getElementById('jornada').value,
-                areaEstudios: document.getElementById('areaEstudios').value,
-                contacto: document.getElementById('contacto').value
-            };
-
-            fetch('{{ path("publicar_oferta") }}', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    alert(data.message);
-                    let listaOfertas = document.getElementById('listaOfertas');
-                    let nuevaOferta = document.createElement('li');
-                    nuevaOferta.innerHTML = `
-                        <strong>${data.cargo}</strong> - ${data.tipoContrato}, ${data.canton}, ${data.parroquia} <br>
-                        <strong>Remuneración:</strong> ${data.remuneracion} - <strong>Jornada:</strong> ${data.jornada} <br>
-                        <strong>Área de Estudios:</strong> ${data.areaEstudios} - <strong>Contacto:</strong> ${data.contacto}
-                    `;
-                    listaOfertas.appendChild(nuevaOferta);
-                    let modal = bootstrap.Modal.getInstance(document.getElementById('modalPublicarOferta'));
-                    modal.hide();
-                } else {
-                    alert('Error al publicar la oferta.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    </script>
-
-    <ul id="listaOfertas">
-        {% for oferta in ofertas %}
-            <li>
-                <strong>{{ oferta.cargo }}</strong> - {{ oferta.tipoContrato }}, {{ oferta.canton }}, {{ oferta.parroquia }} <br>
-                <strong>Remuneración:</strong> {{ oferta.remuneracion }} - <strong>Jornada:</strong> {{ oferta.jornada }} <br>
-                <strong>Área de Estudios:</strong> {{ oferta.areaEstudios }} - <strong>Contacto:</strong> {{ oferta.contacto }}
-            </li>
-        {% endfor %}
-    </ul>
-</div> <!-- End of container -->
-
-  <!-- Footer -->
-  <footer class="text-white text-center py-4" style="background-color: #008374;">
-    <div class="container">
-      <h3 class="fw-bold">NoroccidenteEmplea</h3>
-      <p>Conectando oportunidades, construyendo futuro</p>
-      <div class="d-flex justify-content-center gap-3">
-        <a href="#" class="text-white fs-4"><i class="bi bi-facebook"></i></a>
-        <a href="#" class="text-white fs-4"><i class="bi bi-twitter-x"></i></a>
-        <a href="#" class="text-white fs-4"><i class="bi bi-linkedin"></i></a>
+<!-- Modal para Postulantes -->
+<div class="modal fade" id="modalPostulantes" tabindex="-1" aria-labelledby="modalPostulantesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Lista de Postulantes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <hr class="my-3 border-light">
-      <p class="mb-0">&copy; Copyright <strong>NoroccidenteEmplea</strong>. Todos los derechos reservados</p>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="listaPostulantes"></tbody>
+        </table>
+      </div>
     </div>
-  </footer>
+  </div>
+</div>
+<!-- Sección de Perfil - Derecha -->
+<div class="col-md-4">
+  <div class="card mb-4">
+    <div class="card-body text-center">
+      <!-- Foto de Perfil con Edición -->
+      <form method="POST" action="{{ path('empresa_actualizar_foto') }}" enctype="multipart/form-data" id="formFotoPerfil">
+        <div class="position-relative mb-3">
+          <div class="profile-picture-container">
+            <img src="{{ empresa.fotoPerfil ? asset('uploads/profile/' ~ empresa.fotoPerfil) : asset('images/default-profile.png') }}" 
+                 class="img-fluid rounded-circle profile-picture" 
+                 alt="Foto de perfil" width="150" height="150">
+            <div class="edit-icon">
+              <label for="fotoPerfilInput">
+                <i class="fas fa-pencil-alt"></i>
+              </label>
+            </div>
+          </div>
+          <input type="file" id="fotoPerfilInput" name="fotoPerfil" class="d-none" accept="image/*" onchange="this.form.submit()">
+        </div>
+      </form>
+
+      <!-- Información de la Empresa -->
+      <div class="company-info">
+        <h4 class="mb-3">{{ empresa.nombreEmpresa }}</h4>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <strong>RUC:</strong> {{ empresa.ruc }}
+          </li>
+          <li class="mb-2">
+            <strong>Encargado:</strong> {{ empresa.personaEncargada }}
+          </li>
+          <li class="mb-2">
+            <strong>Contacto:</strong> {{ empresa.contacto }}
+          </li>
+          <li class="mb-2">
+            <strong>Ubicación:</strong> {{ empresa.ubicacion }}
+          </li>
+          <li class="mb-2">
+            <strong>Dirección:</strong> {{ empresa.direccion }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script>
+function aceptarPostulacion(postulacionId) {
+    fetch(`/postulacion/aceptar/${postulacionId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Postulación aceptada exitosamente.');
+            cargarPostulantes(data.ofertaId); // Recargar la lista de postulantes
+        } else {
+            alert('Error al aceptar la postulación.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ocurrió un error al procesar la solicitud.');
+    });
+}
+
+function rechazarPostulacion(postulacionId) {
+    fetch(`/postulacion/rechazar/${postulacionId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Postulación rechazada exitosamente.');
+            cargarPostulantes(data.ofertaId); // Recargar la lista de postulantes
+        } else {
+            alert('Error al rechazar la postulación.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ocurrió un error al procesar la solicitud.');
+    });
+}
+
+</script>
+<script>
+   function cargarPostulantes(ofertaId) {
+    fetch(`/empresa/c/get-postulantes/${ofertaId}`) // Ajuste aquí
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener los postulantes');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const lista = document.getElementById('listaPostulantes');
+            lista.innerHTML = ''; // Limpiar tabla
+
+            data.forEach(postulante => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${postulante.nombre}</td>
+                    <td>${postulante.descripcion}</td>
+                    <td>
+                        ${postulante.curriculum ? 
+                            `<a href="/uploads/curriculums/${postulante.curriculum}" class="btn btn-sm btn-success" download>
+                                Descargar CV
+                             </a>` : 
+                            'Sin CV'
+                        }
+                       <button onclick="aceptarPostulacion(${postulante.postulacionId})" class="btn btn-sm btn-primary">Aceptar</button>
+
+                        <button onclick="rechazarPostulacion(${postulante.postulacionId})" class="btn btn-sm btn-danger">Rechazar</button>
+                    </td>
+                `;
+                lista.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('No se pudieron cargar los postulantes');
+        });
+}
+
+</script>
+
+<script>
+document.getElementById('formPublicarOferta').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Evita la recarga de la página
+
+    const data = {
+        cargo: document.getElementById('cargo').value,
+        tipo_contrato: document.getElementById('tipo_contrato').value,
+        canton: document.getElementById('canton').value,
+        parroquia: document.getElementById('parroquia').value,
+        remuneracion: parseFloat(document.getElementById('remuneracion').value),
+        jornada: document.getElementById('jornada').value,
+        areaEstudios: document.getElementById('areaEstudios').value,
+        contacto: document.getElementById('contacto').value
+    };
+
+    try {
+        const response = await fetch('/publicar-oferta', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache'
+            },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        console.log("Respuesta del servidor:", result);
+
+        if (result.message && result.oferta) {
+            alert('Oferta publicada con éxito');
+
+            console.log("Agregando oferta a la lista:", result.oferta);
+            agregarOfertaALista(result.oferta); // Agregar inmediatamente la oferta
+
+            // Cerrar el modal correctamente
+            let modalElement = document.getElementById('modalPublicarOferta');
+            let modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modalInstance.hide();
+
+            // Limpiar el formulario
+            event.target.reset();
+
+            // Actualizar la lista desde el servidor para sincronizar datos
+            await actualizarListaOfertas();
+        } else {
+            alert('Error al publicar la oferta. Verifica los datos enviados.');
+        }
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+        alert('Ocurrió un error al intentar publicar la oferta.');
+    }
+});
+
+// Función para agregar una oferta a la lista sin recargar
+function agregarOfertaALista(oferta) {
+    const listaOfertas = document.getElementById('listaOfertas');
+
+    if (!listaOfertas) {
+        console.error('Error: Elemento listaOfertas no encontrado en el DOM.');
+        return;
+    }
+
+    console.log("Añadiendo oferta al DOM:", oferta);
+
+    // Crear la nueva oferta como un elemento de lista
+    const nuevaOferta = document.createElement('li');
+    nuevaOferta.setAttribute('data-id', oferta.id);
+    nuevaOferta.innerHTML = `
+        <strong>${oferta.cargo}</strong> - ${oferta.tipo_contrato}, ${oferta.canton}, ${oferta.parroquia} <br>
+        <strong>Remuneración:</strong> ${oferta.remuneracion} - <strong>Jornada:</strong> ${oferta.jornada} <br>
+        <strong>Área de Estudios:</strong> ${oferta.areaEstudios} - <strong>Contacto:</strong> ${oferta.contacto}
+    `;
+
+    // Añadir la nueva oferta al principio de la lista
+    listaOfertas.prepend(nuevaOferta);
+}
+
+// Función para actualizar la lista de ofertas sin recargar la página
+async function actualizarListaOfertas() {
+    try {
+        const response = await fetch(`/get-ofertas?t=${new Date().getTime()}`); // Evita caché
+        const ofertas = await response.json();
+        console.log("Lista actualizada:", ofertas);
+
+        const listaOfertas = document.getElementById('listaOfertas');
+
+        if (!listaOfertas) {
+            console.error('Error: Elemento listaOfertas no encontrado en el DOM.');
+            return;
+        }
+
+        // Limpiar la lista antes de actualizar
+        listaOfertas.innerHTML = '';
+
+        // Agregar cada oferta a la lista
+        ofertas.forEach(agregarOfertaALista);
+    } catch (error) {
+        console.error('Error al actualizar la lista de ofertas:', error);
+    }
+}
+
+// Cargar la lista de ofertas al cargar la página
+document.addEventListener('DOMContentLoaded', actualizarListaOfertas);
+</script>
+
+
+
+
+
+<script>
+function confirmarEliminar(id) {
+  if (confirm("¿Estás seguro de que deseas eliminar esta oferta?")) {
+    fetch(`/eliminar-oferta/${id}`, { method: 'DELETE' })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) { // Verificamos si la respuesta incluye 'message'
+          alert("Oferta eliminada exitosamente.");
+          location.reload(); // Recarga la página automáticamente
+        } else {
+          alert("Error al eliminar la oferta.");
+        }
+      })
+      .catch(error => {
+        console.error("Error en la solicitud:", error);
+        alert("Ocurrió un error al eliminar la oferta.");
+      });
+  }
+}
+
+</script>
+
+
+
+
 <style>
+body {
+  padding-top: 70px; /* Ajusta este valor según la altura del navbar */
+}
+
   .navbar-custom {
     background-color: rgba(0, 131, 116, 0.85);
   }
@@ -186,11 +441,72 @@
   main {
     flex: 1;
   }
-  footer {
-    margin-top: auto;
-  }
+ footer {
+  margin-top: auto;
+  width: 100%;
+  background-color: #008374;
+  padding: 20px 0;
+}
+
   h2.text-center {
     margin-top: 50px;
+  }
+
+   .profile-picture-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+  }
+
+  .profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 3px solid #008374;
+  }
+
+  .edit-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: #008374;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .edit-icon:hover {
+    background: #00695c;
+  }
+
+  .company-info {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .company-info li {
+    border-bottom: 1px solid #dee2e6;
+    padding: 8px 0;
+  }
+
+  .company-info li:last-child {
+    border-bottom: none;
+  }
+   .card {
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
   }
 </style>
 

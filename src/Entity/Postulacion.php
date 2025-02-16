@@ -21,11 +21,11 @@ class Postulacion
     #[Assert\Choice(choices: ["pendiente", "aceptado", "rechazado"], message: "Estado inválido")]
     private string $estado = 'pendiente';
 
-    #[ORM\ManyToOne(inversedBy: 'oferta')]
+    #[ORM\ManyToOne(targetEntity: Postulante::class, inversedBy: 'postulaciones')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Postulante $postulante = null;
 
-    #[ORM\ManyToOne(inversedBy: 'postulacions')]
+    #[ORM\ManyToOne(targetEntity: OfertaLaboral::class, inversedBy: 'postulaciones')]
     #[ORM\JoinColumn(nullable: false)]
     private ?OfertaLaboral $oferta = null;
 

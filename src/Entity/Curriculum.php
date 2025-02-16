@@ -23,7 +23,7 @@ class Curriculum
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_subida = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: "curriculum", targetEntity: Postulante::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Postulante $postulante = null;
 

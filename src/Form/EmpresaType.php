@@ -34,12 +34,7 @@ class EmpresaType extends AbstractType
             ->add('direccion', TextType::class, [
                 'label' => 'Dirección'
             ])
-            ->add('fotoPerfil', FileType::class, [
-                'label' => 'Foto de Perfil (opcional)',
-                'required' => false,
-                'mapped' => true,  // Permite que Symfony asocie este campo con la propiedad de la entidad
-                'attr' => ['accept' => 'image/*'],  // Limita el tipo de archivo aceptado a imágenes
-            ])
+           
             ->add('email', EmailType::class, [
                 'mapped' => false,  // No se mapea directamente con la entidad Empresa, ya que se usará para crear un User
                 'label' => 'Correo Electrónico'

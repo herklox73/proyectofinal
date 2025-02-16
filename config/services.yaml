@@ -20,3 +20,6 @@ services:
 
 parameters:
   foto_perfil_directory: "%kernel.project_dir%/public/uploads/foto_perfil"
+  profile_directory: "%kernel.project_dir%/public/uploads/profile"
+
+  curriculum_directory: "%kernel.project_dir%/public/uploads/curriculums"
